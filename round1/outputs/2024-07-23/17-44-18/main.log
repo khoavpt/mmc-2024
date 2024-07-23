@@ -1,0 +1,5 @@
+[2024-07-23 17:44:19,275][pygad.pygad][ERROR] - The value assigned to the fitness_func parameter is expected to be of type function but <class 'src.algorithm.fitness_func.FitnessFunction'> found.
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python310\lib\site-packages\pygad\pygad.py", line 955, in __init__
+    raise TypeError(f"The value assigned to the fitness_func parameter is expected to be of type function but {type(fitness_func)} found.")
+TypeError: The value assigned to the fitness_func parameter is expected to be of type function but <class 'src.algorithm.fitness_func.FitnessFunction'> found.
