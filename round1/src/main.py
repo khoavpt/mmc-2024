@@ -24,7 +24,11 @@ def main(cfg:DictConfig):
 
     # Load algorithm
     num_genes = (data.num_doctor1 + data.num_doctor2 + data.num_nurse) * data.num_faculties * data.num_days
-    algo: ga.GeneticAlgorithm = hydra.utils.instantiate(cfg.genetic_algorithm, fitness_func=fitness_func, num_genes=num_genes)
+    algo: ga.GeneticAlgorithm = hydra.utils.instantiate(cfg.genetic_algorithm, 
+                                                        fitness_func=fitness_func, 
+                                                        num_genes=num_genes,
+                                                        dataset=data)
+                                                       
     algo.setup(initial_population)
     algo.run()
     algo.plot_results()

@@ -1,0 +1,23 @@
+dataset:
+  _target_: src.data.dataset.Dataset
+  doctor1_file_path: data/doctor_1.csv
+  doctor2_file_path: data/doctor_2.csv
+  nurse_file_path: data/nurse.csv
+  num_doctor1_per_day: 1
+  num_doctor2_per_day: 1
+  num_nurse_per_day: 2
+  num_faculties: 4
+  num_days: 71
+fitness_function:
+  _target_: src.algorithm.fitness_func.FitnessFunction
+  lambda1: 0.1
+  lambda2: 1
+  lambda3: 1
+  lambda4: 1
+genetic_algorithm:
+  _target_: src.algorithm.genetic_alg.GeneticAlgorithm
+  num_generations: 100
+  num_parents_mating: 10
+  sol_per_pop: 20
+  parent_selection_type: sss
+  mutation_percent_genes: 10

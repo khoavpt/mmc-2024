@@ -1,0 +1,9 @@
+[2024-07-25 02:29:35,229][pygad.pygad][ERROR] - could not broadcast input array from shape (19520,) into shape (22720,)
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python310\lib\site-packages\pygad\pygad.py", line 1967, in run
+    self.run_mutation()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python310\lib\site-packages\pygad\pygad.py", line 2271, in run_mutation
+    self.last_generation_offspring_mutation = self.mutation(self.last_generation_offspring_crossover,
+  File "C:\Users\LENOVO\OneDrive\Project\mmc2024\round1\src\algorithm\genetic_alg.py", line 86, in custom_mutation_func
+    offspring[random_chromosome_idx, :] = generate_feasible_individual(num_faculties=4, num_days=61, num_doctor1=19, num_doctor2=17, num_nurse=44, num_doctor1_per_day=1, num_doctor2_per_day=1, num_nurse_per_day=2)
+ValueError: could not broadcast input array from shape (19520,) into shape (22720,)

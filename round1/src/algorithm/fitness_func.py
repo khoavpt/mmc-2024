@@ -28,8 +28,27 @@ class FitnessFunction:
         num_people_per_faculty_per_day = np.sum(np.concatenate([A, B, C], axis=0), axis=0) # shape: (num_faculties, num_days)
         num_faculty_per_day = np.sum(num_people_per_faculty_per_day!=0, axis=0) # shape: (num_days
         num_faculties_not_covered_per_day = self.dataset.num_faculties - num_faculty_per_day # shape: (num_days,)
+        fitness = 1 / np.sum(num_faculties_not_covered_per_day) # float
 
-        return np.sum(num_faculties_not_covered_per_day) # float
+        return utils.sigmoid(fitness) # float in [0, 1]
+
+    def soft_constraint_2(self, solution):
+        """
+        Idea: A day should not have too low total years of experience
+        => Maximize the total years of experience of people working on all days
+        Args:
+            solution: 1D ndarray of shape (num_doctor1 + num_doctor2 + num_nurse) * num_faculties * num_days
+        Returns:
+            float
+        """
+        A, B, C = utils.solution_to_matrixes(solution, self.dataset.num_doctor1, self.dataset.num_doctor2, self.dataset.num_nurse, self.dataset.num_faculties, self.dataset.num_days)
+        total_doc1_years = np.sum(np.sum(A, axis=2) * self.doctor1_data) # float
+        total_doc2_years = np.sum(np.sum(B, axis=2) * self.doctor2_data)
+        total_nurse_years = np.sum(np.sum(C, axis=2) * self.nurse_data)
+        fitness = -1 / (total_doc1_years + total_doc2_years + total_nurse_years) # float
+
+        return utils.sigmoid(fitness) # float in [0, 1]
+
 
     def soft_constraint_4(self, solution):
         """
@@ -47,16 +66,18 @@ class FitnessFunction:
 
         both_doctor_workload = np.sum(np.concatenate([A, B], axis=0), axis=2) # shape: (num_doctor1 + num_doctor2, num_faculties)
         max_doctor_workload_diff = np.max(both_doctor_workload) - np.min(both_doctor_workload) # float
+        fitness = 1 / (max_nurse_workload_diff + max_doctor_workload_diff) # float
 
-        return max_nurse_workload_diff + max_doctor_workload_diff # float
-    
+        return utils.sigmoid(fitness) # float in [0, 1]
+
+        return 
     def violate_hard_constraint(self, solution):
         """
         Idea: Every need to have self.dataset.num_doctor1_per_day doctor1, self.dataset.num_doctor2_per_day doctor2, self.dataset.num_nurse_per_day nurse
         Args:
             solution: 1D ndarray of shape (num_doctor1 + num_doctor2 + num_nurse) * num_faculties * num_days
         Returns:
-            bool
+            bool: True if the solution violates the hard constraint, False otherwise
         """
         A, B, C = utils.solution_to_matrixes(solution, self.dataset.num_doctor1, self.dataset.num_doctor2, self.dataset.num_nurse, self.dataset.num_faculties, self.dataset.num_days)
         num_doctor1_per_day = np.sum(A, axis=(0, 1)) # shape: (num_days,)
@@ -75,4 +96,4 @@ class FitnessFunction:
         # return self.lambda1*self.soft_constraint_1(solution) + self.lambda4*self.soft_constraint_4(solution)
         if self.violate_hard_constraint(solution):
             return -np.inf
-        return -self.lambda4*self.soft_constraint_4(solution) - self.lambda1*self.soft_constraint_1(solution) # float
+        return self.lambda1*self.soft_constraint_1(solution) + self.lambda2*self.soft_constraint_2(solution) + self.lambda4*self.soft_constraint_4(solution)
