@@ -5,7 +5,7 @@ ROOTPATH = rootutils.setup_root(__file__, indicator=".project_root", pythonpath=
 
 import src.utils.utils as utils
 
-class FitnessFunction:
+class CustomFitnessFunction:
     def __init__(self, dataset, lambda1=0.1, lambda2=1, lambda3=1, lambda4=1):
         self.lambda1 = lambda1
         self.lambda2 = lambda2
@@ -28,9 +28,15 @@ class FitnessFunction:
         num_people_per_faculty_per_day = np.sum(np.concatenate([A, B, C], axis=0), axis=0) # shape: (num_faculties, num_days)
         num_faculty_per_day = np.sum(num_people_per_faculty_per_day!=0, axis=0) # shape: (num_days
         num_faculties_not_covered_per_day = self.dataset.num_faculties - num_faculty_per_day # shape: (num_days,)
-        fitness = 1 / np.sum(num_faculties_not_covered_per_day) # float
+        violation = np.sum(num_faculties_not_covered_per_day)
 
-        return utils.sigmoid(fitness) # float in [0, 1]
+        # Min-max normalization for minimization
+        min_value = 0  # All faculties are covered
+        max_value = self.dataset.num_faculties * self.dataset.num_days  # No faculties are covered
+        normalized_violation = (violation - min_value) / (max_value - min_value)
+        normalized_fitness = 1 - normalized_violation
+
+        return normalized_fitness # float in [0, 1]
 
     def soft_constraint_2(self, solution):
         """
@@ -45,9 +51,13 @@ class FitnessFunction:
         total_doc1_years = np.sum(np.sum(A, axis=2) * self.doctor1_data) # float
         total_doc2_years = np.sum(np.sum(B, axis=2) * self.doctor2_data)
         total_nurse_years = np.sum(np.sum(C, axis=2) * self.nurse_data)
-        fitness = -1 / (total_doc1_years + total_doc2_years + total_nurse_years) # float
+        fitness = total_doc1_years + total_doc2_years + total_nurse_years # float
 
-        return utils.sigmoid(fitness) # float in [0, 1]
+        min_value = 0  # No one works
+        max_value = self.dataset.num_days * (self.dataset.num_doctor1_per_day * np.max(self.doctor1_data) + self.dataset.num_doctor2_per_day * np.max(self.doctor2_data) + self.dataset.num_nurse_per_day * np.max(self.nurse_data))  # Only the most experienced people work
+        normalized_fitness = (fitness - min_value) / (max_value - min_value)
+
+        return normalized_fitness # float in [0, 1]
 
 
     def soft_constraint_4(self, solution):
@@ -66,11 +76,15 @@ class FitnessFunction:
 
         both_doctor_workload = np.sum(np.concatenate([A, B], axis=0), axis=2) # shape: (num_doctor1 + num_doctor2, num_faculties)
         max_doctor_workload_diff = np.max(both_doctor_workload) - np.min(both_doctor_workload) # float
-        fitness = 1 / (max_nurse_workload_diff + max_doctor_workload_diff) # float
+        violation = max_nurse_workload_diff + max_doctor_workload_diff
 
-        return utils.sigmoid(fitness) # float in [0, 1]
+        min_value = 0  # All have the same workload
+        max_value = 2 * self.dataset.num_days # One person works every day
+        normalized_violation = (violation - min_value) / (max_value - min_value)
+        normalized_fitness = 1 - normalized_violation
 
-        return 
+        return normalized_fitness # float in [0, 1]
+
     def violate_hard_constraint(self, solution):
         """
         Idea: Every need to have self.dataset.num_doctor1_per_day doctor1, self.dataset.num_doctor2_per_day doctor2, self.dataset.num_nurse_per_day nurse
@@ -86,7 +100,7 @@ class FitnessFunction:
 
         return np.any(num_doctor1_per_day != self.dataset.num_doctor1_per_day) or np.any(num_doctor2_per_day != self.dataset.num_doctor2_per_day) or np.any(num_nurse_per_day != self.dataset.num_nurse_per_day)
         
-    def fitness_function(self, solution):
+    def custom_fitness_function(self, solution):
         """
         Args:
             solution: 1D ndarray of shape (num_doctor1 + num_doctor2 + num_nurse) * num_faculties * num_days
