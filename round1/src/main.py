@@ -45,8 +45,8 @@ def main(cfg:DictConfig):
                                                        
     algo.setup(initial_population)
     algo.run()
-    algo.plot_total_fitness(str(ROOTPATH / "figures" / "total_fitness.png"))
-    algo.plot_constraints(str(ROOTPATH / "figures" / "constraints_fitness.png"))
+    algo.plot_total_fitness(str(ROOTPATH / "figures" / "total_fitness2.png"))
+    algo.plot_constraints(str(ROOTPATH / "figures" / "constraints_fitness2.png"))
 
 if __name__ == '__main__':
     main()

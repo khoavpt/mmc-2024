@@ -1,3 +1,0 @@
-[2024-07-25 19:28:32,548][__main__][INFO] - Best trial: 7
-[2024-07-25 19:28:32,548][__main__][INFO] - Best params: {'sol_per_pop': 100, 'num_parents_mating': 15, 'mutation_percent_genes': 30, 'parent_selection_type': 'sss'}
-[2024-07-25 19:28:32,548][__main__][INFO] - Best fitness: 2.265983606557377

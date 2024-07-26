@@ -113,7 +113,7 @@ hydra:
     - hydra.mode=RUN
     task: []
   job:
-    name: fine_tune
+    name: main
     chdir: null
     override_dirname: ''
     id: ???
@@ -143,7 +143,7 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: C:\Users\LENOVO\OneDrive\uet\mmc-2024\round1\outputs\2024-07-25\19-23-44
+    output_dir: C:\Users\LENOVO\OneDrive\uet\mmc-2024\round1\outputs\2024-07-26\10-48-31
     choices:
       hydra/env: default
       hydra/callbacks: null

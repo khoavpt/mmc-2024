@@ -18,6 +18,6 @@ genetic_algorithm:
   _target_: src.algorithm.genetic_alg.GeneticAlgorithm
   num_generations: 100
   num_parents_mating: 20
-  sol_per_pop: 70
+  sol_per_pop: 100
   parent_selection_type: sss
-  mutation_percent_genes: 40
+  mutation_percent_genes: 20

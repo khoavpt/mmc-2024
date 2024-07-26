@@ -19,7 +19,7 @@ class GeneticAlgorithm:
         self.mutation_func = mutation_func
         self.dataset = dataset
 
-        self.constraint_evaluations = {'soft_constraint_1': [], 'soft_constraint_2': [], 'soft_constraint_4': []}
+        self.constraint_evaluations = {'soft_constraint_1': [], 'soft_constraint_2': [], 'soft_constraint_3': [], 'soft_constraint_4': []}
         self.fitness_values = []
 
     def setup(self, initial_population):
@@ -37,6 +37,7 @@ class GeneticAlgorithm:
             self.fitness_values.append(solution_fitness)  # Store fitness value
             self.constraint_evaluations['soft_constraint_1'].append(self.fitness_func.soft_constraint_1(solution))
             self.constraint_evaluations['soft_constraint_2'].append(self.fitness_func.soft_constraint_2(solution))
+            self.constraint_evaluations['soft_constraint_3'].append(self.fitness_func.soft_constraint_3(solution))
             self.constraint_evaluations['soft_constraint_4'].append(self.fitness_func.soft_constraint_4(solution))
 
         self.ga_instance = pygad.GA(num_generations=self.num_generations,

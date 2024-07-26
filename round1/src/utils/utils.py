@@ -39,6 +39,24 @@ def solution_to_matrixes(solution, num_doctor1, num_doctor2, num_nurse, num_facu
 
     return A, B, C
 
+def get_number_of_consecutive_sequences_longer_than_k(arr, k):
+    """
+    Calculate the number of consecutive sequences longer than length k in axis 1
+    Args:
+        arr: binary 2D ndarray
+        k: int
+    Returns:
+        int
+    """
+    zeros = np.zeros((1, arr.shape[1]))
+    arr = np.concatenate([zeros, arr, zeros], axis=0)
+    arr = arr.swapaxes(1, 0).flatten()
+    diff = np.diff(arr)
+    starts = np.where(diff == 1)[0]
+    ends = np.where(diff == -1)[0]
+    
+    lengths = ends - starts
+    return np.sum(lengths > 1)
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
