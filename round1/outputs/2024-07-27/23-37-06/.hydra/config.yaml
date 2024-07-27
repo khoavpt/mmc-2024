@@ -10,9 +10,9 @@ dataset:
   num_days: 61
 fitness_function:
   _target_: src.algorithm.fitness_func.CustomFitnessFunction
-  lambda1: 1
-  lambda2: 1
-  lambda3: 1
+  lambda1: 1.5
+  lambda2: 1.5
+  lambda3: 0.5
   lambda4: 1
 genetic_algorithm:
   _target_: src.algorithm.genetic_alg.GeneticAlgorithm
@@ -20,4 +20,5 @@ genetic_algorithm:
   num_parents_mating: 20
   sol_per_pop: 100
   parent_selection_type: sss
-  mutation_percent_genes: 20
+  mutation_percent_genes: 10
+  mutation_probability: 0.09

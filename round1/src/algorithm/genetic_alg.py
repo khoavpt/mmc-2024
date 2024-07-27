@@ -6,14 +6,17 @@ import seaborn as sns
 
 ROOTPATH = rootutils.setup_root(__file__, indicator=".project_root", pythonpath=True)
 
+import src.utils.utils as utils
+
 class GeneticAlgorithm:
-    def __init__(self, num_genes, fitness_func, crossover_func, mutation_func, dataset, num_generations=100, num_parents_mating=10, sol_per_pop=20, parent_selection_type="sss", mutation_percent_genes=10):
+    def __init__(self, num_genes, fitness_func, crossover_func, mutation_func, dataset, num_generations=100, num_parents_mating=10, sol_per_pop=20, parent_selection_type="sss", mutation_percent_genes=10, mutation_probability=0.1):
         self.num_generations = num_generations
         self.num_parents_mating = num_parents_mating
         self.sol_per_pop = sol_per_pop
         self.num_genes = num_genes
         self.parent_selection_type = parent_selection_type
         self.mutation_percent_genes = mutation_percent_genes
+        self.mutation_probability = mutation_probability
         self.fitness_func = fitness_func
         self.crossover_func = crossover_func
         self.mutation_func = mutation_func
@@ -50,6 +53,7 @@ class GeneticAlgorithm:
                                     mutation_percent_genes=self.mutation_percent_genes,
                                     sol_per_pop=self.sol_per_pop,
                                     initial_population=initial_population,
+                                    mutation_probability=self.mutation_probability,
                                     gene_space=[0, 1],
                                     on_generation=callback_function)
 
@@ -60,6 +64,27 @@ class GeneticAlgorithm:
         print("Run finished!")
         print(f"Fitness value of the best solution: {solution_fitness}")
         return solution, solution_fitness, solution_idx
+    
+    def show_results(self, solution):
+        """
+        Args:
+            solution: 1D ndarray of shape (num_doctor1 + num_doctor2 + num_nurse) * num_faculties * num_days
+        Returns:
+            doc1_work_days: 2D ndarray of shape (num_doctor1, 2)
+            doc2_work_days: 2D ndarray of shape (num_doctor2, 2)
+            nurse_work_days: 2D ndarray of shape (num_nurse, 2)
+        """
+        A, B, C = utils.solution_to_matrixes(solution, self.dataset.num_doctor1, self.dataset.num_doctor2, self.dataset.num_nurse, self.dataset.num_faculties, self.dataset.num_days)
+        doc1_work_days = np.sum(A, axis=1) # (num_doctor1, num_days)
+        doc2_work_days = np.sum(B, axis=1) # (num_doctor2, num_days)
+        nurse_work_days = np.sum(C, axis=1) # (num_nurse, num_days)
+
+        doc1_work_days = np.transpose(np.nonzero(doc1_work_days)) # (num_doctor1, 2)
+        doc2_work_days = np.transpose(np.nonzero(doc2_work_days)) # (num_doctor2, 2)
+        nurse_work_days = np.transpose(np.nonzero(nurse_work_days)) # (num_nurse, 2)
+
+        return doc1_work_days, doc2_work_days, nurse_work_days 
+        
 
     def plot_total_fitness(self, path=None):
         sns.set_theme(style="whitegrid")
