@@ -1,0 +1,9 @@
+hydra
+omegaconf
+rootutils
+logging
+pandas
+optuna
+numpy
+matplotlib
+pygad
