@@ -4,7 +4,6 @@ import rootutils
 import logging
 import pandas as pd
 
-
 ROOTPATH = rootutils.setup_root(__file__, indicator=".project_root", pythonpath=True)
 CONFIGPATH = str(ROOTPATH / "configs")
 

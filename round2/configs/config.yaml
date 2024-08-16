@@ -1,0 +1,13 @@
+dataset:
+  _target_: src.data.dataset.GlucoseRecordings
+  gv_recordings_path: data/pretrain.tsv
+
+model:
+  _target_: src.models.glucose_insulin.GIModel
+  X0: 0.0
+  Gb: 75.0
+  Ib: 15.0
+  Gth: 95.0
+  nutrition_model: gamma
+  optimizer_name: adam
+  lr: 0.005
