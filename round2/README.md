@@ -59,6 +59,7 @@ round2/
 │   │   │   └── mixed_nutrition_models.py
 │   ├── utils/               # Utility scripts
 │   │   └── utils.py
-│   └── __pycache__/
+│   ├── __pycache__/
+│   └──  glucose_insulines.py # Contains glucose_insuline model implementation
 ```
 Final modeling results can be found in the `results` folder
