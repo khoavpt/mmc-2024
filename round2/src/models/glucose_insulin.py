@@ -32,8 +32,12 @@ class GIModel(pl.LightningModule):
             self.nutrition_model = nm.GammaNutritionModel()
         elif nutrition_model == 'exponential':
             self.nutrition_model = nm.ExponentialNutritionModel()
-        # elif nutrition_model == 'gaussian':
-        #     self.nutrition_model = nm.GaussianNutritionModel()
+        elif nutrition_model == 'gaussian':
+            self.nutrition_model = nm.GaussianNutritionModel()
+        elif nutrition_model == 'mixed':
+            self.nutrition_model = nm.MixedNutritionModel()
+        elif nutrition_model == 'kan':
+            self.nutrition_model = nm.KanNutritionModel()
         else:
             raise ValueError(f"Invalid nutrition model: {nutrition_model}")
 
@@ -66,7 +70,7 @@ class GIModel(pl.LightningModule):
         t, gv, meal_nutritions = batch
         t = t.squeeze() # (meal_records_length)
         gv = gv.squeeze() # (meal_records_length)
-        meal_nutritions = meal_nutritions.squeeze(1) # (6, )
+        meal_nutritions = meal_nutritions.squeeze() # (6, )
 
         # Predict the glucose value using the current parameters
         G_pred = self(t, gv, meal_nutritions)

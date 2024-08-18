@@ -27,7 +27,7 @@ def main(cfg:DictConfig):
 
     # Train the model
     loss_logger = utils.LossLogger()
-    trainer = pl.Trainer(max_epochs=20, callbacks=[loss_logger])
+    trainer = pl.Trainer(max_epochs=10, callbacks=[loss_logger])
     trainer.fit(model, pretrain_dataloader)
 
     # Plot and save the losses

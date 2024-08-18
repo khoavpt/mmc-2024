@@ -1,0 +1,2 @@
+- model.nutrition_model=gaussian
+- model.lr=0.005

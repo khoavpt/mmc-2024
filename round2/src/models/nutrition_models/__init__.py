@@ -1,3 +1,5 @@
 from .gamma_nutrition_models import GammaNutritionModel
 from .exponential_nutrition_models import ExponentialNutritionModel
-# from .gaussian_nutrition_models import GaussianNutritionModel
+from .gaussian_nutrition_models import GaussianNutritionModel
+from .kan_nutrition_models import KanNutritionModel
+from .mixed_nutrition_models import MixedNutritionModel

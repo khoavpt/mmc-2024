@@ -2,25 +2,23 @@ import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import seaborn as sns
+import kan
 
-class GammaNutritionModel(nn.Module):
+class KanNutritionModel(nn.Module):
     def __init__(self):
         super().__init__()
-        # Initialize parameters for each nutrition (calories, fat, carb, sugar, fiber, protein)
-        self.k = nn.Parameter(torch.tensor([8.0, 8.0, 8.0, 8.0, 8.0, 8.0], dtype=torch.float32))
-        self.theta = nn.Parameter(torch.tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype=torch.float32))
-    
+        self.kan_layer = kan.KAN(width=[1, 6], grid_range=[0, 40])
+
     def forward(self, t, meal_nutritions):
         """
         Args:
             t: (meal_records_length)
             meal_nutritions: (6)
         """
-        t = t.unsqueeze(1) # (meal_records_length, 1)
-        gamma_dist = (t**(self.k - 1) * torch.exp(-t/self.theta)) / (self.theta**self.k * torch.exp(torch.lgamma(self.k)))
-        result = torch.sum(meal_nutritions * gamma_dist, dim=1) # (meal_records_length, 1)
-        return result # (meal_records_length, 1)
-    
+        nutritions_func = self.kan_layer(t.unsqueeze(1))
+        result = torch.sum(nutritions_func * meal_nutritions, dim=1)
+        return result
+
     def plot_nutrition_distributions(self, filename=None):
         t = torch.linspace(0, 40, steps=100)  # Generate 100 points from 0 to 40
         meal_nutritions = torch.eye(6)  # Identity matrix to isolate each nutrition
@@ -35,7 +33,7 @@ class GammaNutritionModel(nn.Module):
 
         plt.xlabel('Time (t)', fontsize=14)
         plt.ylabel('Distribution', fontsize=14)
-        plt.title('Distributions for Each Nutrition', fontsize=16)
+        plt.title('KAN Distributions for Each Nutrition', fontsize=16)
         plt.legend(fontsize=12)
         plt.grid(True, which='both', linestyle='-', linewidth=0.5, color='gray')
         plt.tight_layout()
