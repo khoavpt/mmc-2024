@@ -1,6 +1,14 @@
 # Round 2
 This project is part of Round 2 Math Modeling contest 2024. 
-## Setup
+## Overview
+This project builds a mathematical model to simulate the glucose-insulin interaction using real patient meal data. It is trained using gradient descent optimization on pre-trained and fine-tuned data to predict glucose levels effectively.
+![Glucose-Insulin Model](figures/test_result.png)
+
+### Features
+- Glucose-Insulin interaction simulation based on differential equations.
+- Support for multiple types of nutrition models (Gaussian, Gamma, Mixed, KAN).
+- Configurable pre-training and fine-tuning steps.
+### Setup
 To User the project, follow these steps:
 
 1. Install the required dependencies:
@@ -10,7 +18,7 @@ To User the project, follow these steps:
 
 2. To run the pretrain script:
     ```bash
-    python main.py
+    python pretrain.py
     ```
 
 Pretrain script can be run with different configs by adding the data to the `data` folder and changing the configurations in `config.yaml`. 
@@ -21,7 +29,6 @@ python pretrain.py model.lr=0.01
 ```
 
 3. Finetune tutorials can be found in the `finetuning.ipynb` notebooks in the `notebooks` folder.
-
 
 ## Folder Structure
 ```
@@ -60,6 +67,7 @@ round2/
 │   ├── utils/               # Utility scripts
 │   │   └── utils.py
 │   ├── __pycache__/
-│   └──  glucose_insulines.py # Contains glucose_insuline model implementation
+│   ├──  glucose_insulines.py # Contains glucose_insuline model implementation
+│   └──  report.pdf           # Contains details of the mathematical model
 ```
-Final modeling results can be found in the `results` folder
+Details of the mathematical model and methodology are provided in `report.pdf`.
